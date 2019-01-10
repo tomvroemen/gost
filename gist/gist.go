@@ -50,19 +50,9 @@ func List(url string, accessToken string) {
 	}
 }
 
-func Post(baseUrl string, accessToken string, isPublic bool, filesPath []string, description string, openBrowser bool) {
+func Post(baseUrl string, accessToken string, isPublic bool, name string, content string, description string, openBrowser bool) {
 	files := make(map[string]GistJSON.File)
-
-	for i := 0; i < len(filesPath); i++ {
-		content, err := ioutil.ReadFile(filesPath[i])
-		if err != nil {
-			fmt.Printf("%s", err)
-			os.Exit(1)
-		}
-		fileName := path.Base(filesPath[i])
-		files[fileName] = GistJSON.File{Content: string(content)}
-	}
-
+	files[name] = GistJSON.File{Content: content}
 	gist := GistJSON.Post{Desc: description, Public: isPublic, Files: files}
 
 	// encode json
@@ -110,19 +100,9 @@ func Post(baseUrl string, accessToken string, isPublic bool, filesPath []string,
 	fmt.Printf("%s\n", jsonRes.HtmlUrl)
 }
 
-func Update(baseUrl string, accessToken string, filesPath []string, gistUrl string, description string, openBrowser bool) {
+func Update(baseUrl string, accessToken string, name string, content string, gistUrl string, description string, openBrowser bool) {
 	files := make(map[string]GistJSON.File)
-
-	for i := 0; i < len(filesPath); i++ {
-		content, err := ioutil.ReadFile(filesPath[i])
-		if err != nil {
-			fmt.Printf("%s\n", err)
-			os.Exit(1)
-		}
-		fileName := path.Base(filesPath[i])
-		files[fileName] = GistJSON.File{Content: string(content)}
-	}
-
+	files[name] = GistJSON.File{Content: content}
 	gist := GistJSON.Patch{Desc: description, Files: files}
 
 	// encode json
